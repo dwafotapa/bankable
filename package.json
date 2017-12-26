@@ -101,5 +101,6 @@
   "devDependencies": {
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6"
-  }
+  },
+  "proxy": "https://0acabff8dfd8.trustbk.com/"
 }
