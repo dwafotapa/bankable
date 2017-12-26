@@ -3,9 +3,9 @@ import * as actions from './actions'
 import reducer from './reducer'
 
 describe('actions', () => {
-  it('should return the initial state by default', () => {
-    const initialState = {}
+  const initialState = uuid()
 
+  it('should return the initial state by default', () => {
     const nextState = reducer(initialState, { type: 'DEFAULT'})
 
     expect(nextState).toBe(initialState)
@@ -17,8 +17,8 @@ describe('actions', () => {
       id: uuid()
     }
 
-    const nextState = reducer({}, action)
+    const nextState = reducer(initialState, action)
 
-    expect(nextState.bankerId).toEqual(action.id)
+    expect(nextState).toEqual(action.id)
   })
 })

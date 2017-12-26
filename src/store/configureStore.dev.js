@@ -2,9 +2,9 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { createLogger } from 'redux-logger'
 import saga from 'redux-saga'
+import bankerId from 'components/App/reducer'
 
-const reducer = (state = {}, action) => state
-const rootReducer = combineReducers({ reducer })
+const rootReducer = combineReducers({ bankerId })
 
 const enhancer = composeWithDevTools(
   applyMiddleware(saga, createLogger())

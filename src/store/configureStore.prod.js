@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import saga from 'redux-saga'
+import bankerId from 'components/App/reducer'
 
-const rootReducer = combineReducers({})
+const rootReducer = combineReducers({ bankerId })
 
 const enhancer = applyMiddleware(saga)
 
