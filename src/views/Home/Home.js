@@ -1,7 +1,10 @@
 import React from 'react'
+import { Container } from 'semantic-ui-react'
 
 const Home = () => (
-  <div>Home</div>
+  <Container>
+    Welcome to bankable.
+  </Container>
 )
 
 export default Home
