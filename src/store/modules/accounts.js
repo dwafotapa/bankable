@@ -5,16 +5,16 @@ export const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
 export const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
 export const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
 
-const fetchAccountsRequest = () => ({
+export const fetchAccountsRequest = () => ({
   type: FETCH_ACCOUNTS_REQUEST
 })
 
-const fetchAccountsFailure = (ex) => ({
+export const fetchAccountsFailure = (error) => ({
   type: FETCH_ACCOUNTS_FAILURE,
-  ex
+  error
 })
 
-const fetchAccountsSuccess = (accounts) => ({
+export const fetchAccountsSuccess = (accounts) => ({
   type: FETCH_ACCOUNTS_SUCCESS,
   accounts
 })
@@ -28,5 +28,14 @@ export const fetchAccounts = () => {
       .then(handleErrors)
       .then(json => dispatch(fetchAccountsSuccess(json.accounts)))
       .catch(ex => dispatch(fetchAccountsFailure(ex)))
+  }
+}
+
+const initialState = []
+
+export default function accounts(state = initialState, action) {
+  switch (action.type) {
+    default:
+      return state
   }
 }

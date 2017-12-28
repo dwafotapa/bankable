@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import saga from 'redux-saga'
-import bankerId from 'components/App/reducer'
+import bankerId from 'store/modules/bankerId'
 
 const rootReducer = combineReducers({ bankerId })
 
