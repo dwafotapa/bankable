@@ -1,32 +1,14 @@
-import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Container, Table } from 'semantic-ui-react'
-import { fetchAccountsRequest } from 'store/modules/accounts';
+import AccountList from './AccountList'
+import { fetchAccountsRequest } from 'store/modules/accounts'
+import { toJS } from 'utils/to-js'
 
-class AccountListContainer extends Component {
-  componentDidMount() {
-    this.props.fetchAccountsRequest()
-  }
-
-  render() {
-    // const accounts = props.accounts.map(account => <Table.Cell>{account.name}</Table.Cell>)
-    return (
-      <Container>
-        <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Accounts</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            <Table.Row>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </Container>
-    )
-  }
-}
+const mapStateToProps = (state, ownProps) => ({
+  ...ownProps,
+  isFetching: state.accounts.isFetching,
+  hasFailed: state.accounts.hasFailed,
+  accounts: state.accounts.ids.map(id => state.accounts.byId.get(id))
+})
 
 const mapDispatchToProps = (dispatch) => ({
   fetchAccountsRequest: () => {
@@ -34,4 +16,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export default connect(null, mapDispatchToProps)(AccountListContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(toJS(AccountList))

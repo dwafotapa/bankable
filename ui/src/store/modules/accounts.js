@@ -1,32 +1,47 @@
 import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { schema, normalize } from 'normalizr'
+import { List, Map, fromJS } from 'immutable'
 import { handleErrors } from 'utils/fetch'
 
-export const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
-export const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
-export const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
+const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
+const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
+const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
 
 export const fetchAccountsRequest = () => ({
   type: FETCH_ACCOUNTS_REQUEST
 })
 
-export const fetchAccountsFailure = (error) => ({
+const fetchAccountsFailure = (error) => ({
   type: FETCH_ACCOUNTS_FAILURE,
   error
 })
 
-export const fetchAccountsSuccess = (accounts) => ({
+const fetchAccountsSuccess = (ids, byId) => ({
   type: FETCH_ACCOUNTS_SUCCESS,
-  accounts
+  ids,
+  byId
 })
+
+const accountEntity = new schema.Entity(
+  'accounts',
+  { accounts: {} },
+  {
+    idAttribute: 'number',
+    processStrategy: (entity) => ({
+      id: entity.number,
+      companyName: entity.company_name
+    })
+  }
+)
 
 export function* fetchAccounts() {
   try {
     const { bankerId } = yield select()
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts`)
     const json = yield call(handleErrors, response)
-    console.log(json)
-    yield put(fetchAccountsSuccess(json.accounts))
+    const normalized = normalize(json.accounts, new schema.Array(accountEntity))
+    yield put(fetchAccountsSuccess(normalized.result, normalized.entities.accounts))
   } catch (error) {
     yield put(fetchAccountsFailure(error))
   }
@@ -38,8 +53,9 @@ export function* watchFetchAccounts() {
 
 const initialState = {
   isFetching: false,
-  hasFetchFailed: false,
-  items: []
+  hasFailed: false,
+  ids: List(),
+  byId: Map()
 }
 
 export default function accounts(state = initialState, action) {
@@ -48,19 +64,20 @@ export default function accounts(state = initialState, action) {
       return {
         ...state,
         isFetching: true,
-        hasFetchFailed: false
+        hasFailed: false
       }
     case FETCH_ACCOUNTS_FAILURE:
       return {
         ...state,
         isFetching: false,
-        hasFetchFailed: true
+        hasFailed: true
       }
     case FETCH_ACCOUNTS_SUCCESS:
       return {
         ...state,
-        isFetching: true,
-        items: action.accounts        
+        isFetching: false,
+        ids: List(action.ids),
+        byId: fromJS(action.byId)
       }
     default:
       return state
