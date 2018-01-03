@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 
-class Nav extends Component {
+class MenuWrapper extends Component {
   render() {
     const { pathname } = window.location
     return (
-      <Menu color="blue" inverted>
+      <Menu pointing secondary size="massive">
         <Menu.Item
           active={pathname === '/'}
           as={Link}
@@ -15,7 +15,7 @@ class Nav extends Component {
           Home
         </Menu.Item>
         <Menu.Item
-          active={pathname === '/accounts'}
+          active={pathname.startsWith('/accounts')}
           as={Link}
           to="/accounts"
         >
@@ -26,4 +26,4 @@ class Nav extends Component {
   }
 }
 
-export default Nav
+export default MenuWrapper

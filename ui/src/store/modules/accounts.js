@@ -1,12 +1,13 @@
 import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
-import { List, Map, fromJS } from 'immutable'
+import { fromJS } from 'immutable'
 import { handleErrors } from 'utils/fetch'
 
 const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
 const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
 const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
+const SET_ACCOUNT_TASKS = 'SET_ACCOUNT_TASKS'
 
 export const fetchAccountsRequest = () => ({
   type: FETCH_ACCOUNTS_REQUEST
@@ -21,6 +22,12 @@ const fetchAccountsSuccess = (ids, byId) => ({
   type: FETCH_ACCOUNTS_SUCCESS,
   ids,
   byId
+})
+
+export const setAccountTasks = (accountId, taskIds) => ({
+  type: SET_ACCOUNT_TASKS,
+  accountId,
+  taskIds
 })
 
 const accountEntity = new schema.Entity(
@@ -51,35 +58,38 @@ export function* watchFetchAccounts() {
   yield takeEvery(FETCH_ACCOUNTS_REQUEST, fetchAccounts)
 }
 
-const initialState = {
+const initialState = fromJS({
   isFetching: false,
   hasFailed: false,
-  ids: List(),
-  byId: Map()
-}
+  ids: [],
+  byId: {}
+})
 
-export default function accounts(state = initialState, action) {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ACCOUNTS_REQUEST:
-      return {
-        ...state,
+      return state.merge({
         isFetching: true,
         hasFailed: false
-      }
+      })
     case FETCH_ACCOUNTS_FAILURE:
-      return {
-        ...state,
+      return state.merge({
         isFetching: false,
         hasFailed: true
-      }
+      })
     case FETCH_ACCOUNTS_SUCCESS:
-      return {
-        ...state,
+      return state.merge({
         isFetching: false,
-        ids: List(action.ids),
-        byId: fromJS(action.byId)
-      }
+        ids: action.ids,
+        byId: action.byId
+      })
+    case SET_ACCOUNT_TASKS:
+      return state.merge({
+        byId: state.get('byId').setIn([action.accountId, 'taskIds'], action.taskIds)
+      })
     default:
       return state
   }
 }
+
+export default reducer

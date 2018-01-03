@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Table } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+import { Container, Header, List } from 'semantic-ui-react'
 
 class AccountList extends Component {
   componentDidMount() {
@@ -9,37 +10,31 @@ class AccountList extends Component {
 
   render() {
     const { isFetching, hasFailed, accounts } = this.props
-    console.log(accounts)
     if (hasFailed) {
-      return <div>Failed to fetch data. Please reload the page.</div>
+      return <Container>Failed to fetch data. Please reload the page.</Container>
     }
 
     if (accounts.length === 0) {
       if (isFetching) {
-        return <div>Loading...</div>
+        return <Container>Loading...</Container>
       }
 
-      return <div>No accounts found.</div>
+      return <Container>No accounts found.</Container>
     }
 
     return (
       <Container>
-        <Table selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Account Number</Table.HeaderCell>
-              <Table.HeaderCell>Company Name</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {accounts.map(account =>
-              <Table.Row key={account.id} onClick={null}>
-                <Table.Cell>{account.id}</Table.Cell>
-                <Table.Cell>{account.companyName}</Table.Cell>
-              </Table.Row>
-            )}
-          </Table.Body>
-        </Table>
+        <Header as="h3" block textAlign="center">Your Accounts</Header>
+        <List divided relaxed>
+          {accounts.map(account =>
+            <List.Item key={account.id}>
+              <List.Content>
+                <List.Header><Link to={`/accounts/${account.id}/tasks`}>{account.id}</Link></List.Header>
+                <List.Description>{account.companyName}</List.Description>
+              </List.Content>
+            </List.Item>
+          )}
+        </List>
       </Container>
     )
   }

@@ -1,15 +1,13 @@
-import uuid from 'uuid'
-
 export const SET_BANKER_ID = 'SET_BANKER_ID'
 
-export const setBankerId = () => ({
+export const setBankerId = (id) => ({
   type: SET_BANKER_ID,
-  id: uuid()
+  id
 })
 
-const initialState = uuid()
+const initialState = ''
 
-export default function reducer(state = initialState, action) {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_BANKER_ID:
       return action.id
@@ -17,3 +15,5 @@ export default function reducer(state = initialState, action) {
       return state
   }
 }
+
+export default reducer

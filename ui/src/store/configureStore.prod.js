@@ -1,13 +1,6 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import createSagaMiddleware, { END } from 'redux-saga'
-import bankerId from 'store/modules/bankerId'
-import accounts from 'store/modules/accounts'
-import { watchFetchAccounts as rootSaga } from 'store/modules/accounts'
-
-const rootReducer = combineReducers({
-  bankerId,
-  accounts
-})
+import { createStore, applyMiddleware, compose } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import rootReducer, { rootSaga } from 'store/modules/root'
 
 const sagaMiddleware = createSagaMiddleware()
 const enhancer = applyMiddleware(sagaMiddleware)
