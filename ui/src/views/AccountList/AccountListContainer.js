@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { toJS } from 'utils/to-js'
 import AccountList from './AccountList'
-import { fetchAccountsRequest } from 'store/modules/accounts'
+import { fetchAccountsRequest, resetAccountsRequest } from 'store/modules/accounts'
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -11,7 +11,8 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchAccountsRequest: () => dispatch(fetchAccountsRequest())
+  fetchAccountsRequest: () => dispatch(fetchAccountsRequest()),
+  resetAccountsRequest: () => dispatch(resetAccountsRequest())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(toJS(AccountList))

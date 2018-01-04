@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Container, Header, List } from 'semantic-ui-react'
+import { Container, Header, List, Button } from 'semantic-ui-react'
 
 class AccountList extends Component {
   componentDidMount() {
     this.props.fetchAccountsRequest()
+  }
+
+  handleResetButtonClick = () => {
+    this.props.resetAccountsRequest()
   }
 
   render() {
@@ -35,6 +39,7 @@ class AccountList extends Component {
             </List.Item>
           )}
         </List>
+        <Button onClick={this.handleResetButtonClick}>Reset</Button>
       </Container>
     )
   }
@@ -44,7 +49,8 @@ AccountList.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object.isRequired,
   accounts: PropTypes.array.isRequired,
-  fetchAccountsRequest: PropTypes.func.isRequired
+  fetchAccountsRequest: PropTypes.func.isRequired,
+  resetAccountsRequest: PropTypes.func.isRequired
 }
 
 export default AccountList

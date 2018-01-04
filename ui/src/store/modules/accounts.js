@@ -8,6 +8,9 @@ const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
 const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
 const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
 const SET_ACCOUNT_TASKS = 'SET_ACCOUNT_TASKS'
+const RESET_ACCOUNTS_REQUEST = 'RESET_ACCOUNTS_REQUEST'
+const RESET_ACCOUNTS_FAILURE = 'RESET_ACCOUNTS_FAILURE'
+const RESET_ACCOUNTS_SUCCESS = 'RESET_ACCOUNTS_SUCCESS'
 
 export const fetchAccountsRequest = () => ({
   type: FETCH_ACCOUNTS_REQUEST
@@ -28,6 +31,19 @@ export const setAccountTasks = (accountId, taskIds) => ({
   type: SET_ACCOUNT_TASKS,
   accountId,
   taskIds
+})
+
+export const resetAccountsRequest = () => ({
+  type: RESET_ACCOUNTS_REQUEST
+})
+
+const resetAccountsFailure = (error) => ({
+  type: RESET_ACCOUNTS_FAILURE,
+  error
+})
+
+const resetAccountsSuccess = () => ({
+  type: RESET_ACCOUNTS_SUCCESS
 })
 
 const accountEntity = new schema.Entity(
@@ -56,6 +72,25 @@ export function* fetchAccounts() {
 
 export function* watchFetchAccountsRequest() {
   yield takeEvery(FETCH_ACCOUNTS_REQUEST, fetchAccounts)
+}
+
+export function* resetAccounts() {
+  try {
+    const { bankerId } = yield select()    
+    const response = yield call(fetch,
+      `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/reset`,
+      { method: 'POST' }
+    )
+    yield call(handleResponse, response, false)
+    yield put(resetAccountsSuccess())
+    yield put(fetchAccountsRequest())
+  } catch (error) {
+    yield put(resetAccountsFailure(error))
+  }
+}
+
+export function* watchResetAccountsRequest() {
+  yield takeEvery(RESET_ACCOUNTS_REQUEST, resetAccounts)
 }
 
 const initialState = fromJS({
@@ -87,6 +122,18 @@ const reducer = (state = initialState, action) => {
       return state.merge({
         byId: state.get('byId').setIn([action.accountId, 'taskIds'], action.taskIds)
       })
+    case RESET_ACCOUNTS_REQUEST:
+      return state.merge({
+        isFetching: true,
+        error: {}
+      })
+    case RESET_ACCOUNTS_FAILURE:
+      return state.merge({
+        isFetching: false,
+        error: action.error
+      })
+    case RESET_ACCOUNTS_SUCCESS:
+      return state.merge({ isFetching: false })
     default:
       return state
   }

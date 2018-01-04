@@ -114,9 +114,10 @@ export function* watchFetchTaskRequest() {
 export function* closeTask({ accountId, taskId }) {
   try {
     const { bankerId } = yield select()
-    const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/close`, {
-      method: 'POST'
-    })
+    const response = yield call(fetch,
+      `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/close`,
+      { method: 'POST' }
+    )
     yield call(handleResponse, response, false)
     yield put(closeTaskSuccess(accountId, taskId))
     yield put(fetchTaskRequest(accountId, taskId))
@@ -180,9 +181,7 @@ const reducer = (state = initialState, action) => {
         error: action.error
       })
     case CLOSE_TASK_SUCCESS:
-      return state.merge({
-        isFetching: false
-      })
+      return state.merge({ isFetching: false })
     default:
       return state
   }
