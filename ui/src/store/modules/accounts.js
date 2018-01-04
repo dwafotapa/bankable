@@ -2,7 +2,7 @@ import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
 import { fromJS } from 'immutable'
-import { handleErrors } from 'utils/fetch'
+import { handleResponse } from 'utils/fetch'
 
 const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
 const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
@@ -46,7 +46,7 @@ export function* fetchAccounts() {
   try {
     const { bankerId } = yield select()
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts`)
-    const json = yield call(handleErrors, response)
+    const json = yield call(handleResponse, response)
     const normalized = normalize(json.accounts, new schema.Array(accountEntity))
     yield put(fetchAccountsSuccess(normalized.result, normalized.entities.accounts))
   } catch (error) {
@@ -54,13 +54,13 @@ export function* fetchAccounts() {
   }
 }
 
-export function* watchFetchAccounts() {
+export function* watchFetchAccountsRequest() {
   yield takeEvery(FETCH_ACCOUNTS_REQUEST, fetchAccounts)
 }
 
 const initialState = fromJS({
-  isFetching: false,
-  hasFailed: false,
+  isFetching: true,
+  error: {},
   ids: [],
   byId: {}
 })
@@ -70,12 +70,12 @@ const reducer = (state = initialState, action) => {
     case FETCH_ACCOUNTS_REQUEST:
       return state.merge({
         isFetching: true,
-        hasFailed: false
+        error: {}
       })
     case FETCH_ACCOUNTS_FAILURE:
       return state.merge({
         isFetching: false,
-        hasFailed: true
+        error: action.error
       })
     case FETCH_ACCOUNTS_SUCCESS:
       return state.merge({

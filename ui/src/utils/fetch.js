@@ -1,7 +1,11 @@
-export const handleErrors = (response) => {
+export const handleResponse = (response, isJSON = true) => {
   if (response.ok) {
-    return response.json();
+    if (isJSON) {
+      return response.json()
+    } else {
+      return response.text()
+    }
   }
-
-  throw new Error(response.statusText);
+  
+  throw new Error(response.statusText)
 }

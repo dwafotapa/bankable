@@ -9,16 +9,16 @@ class AccountList extends Component {
   }
 
   render() {
-    const { isFetching, hasFailed, accounts } = this.props
-    if (hasFailed) {
-      return <Container>Failed to fetch data. Please reload the page.</Container>
+    const { isFetching, error, accounts } = this.props
+    if (isFetching) {
+      return <Container>Loading...</Container>
+    }
+
+    if (error.message) {
+      return <Container>An error has occurred: {error.message}.</Container>
     }
 
     if (accounts.length === 0) {
-      if (isFetching) {
-        return <Container>Loading...</Container>
-      }
-
       return <Container>No accounts found.</Container>
     }
 
@@ -42,7 +42,7 @@ class AccountList extends Component {
 
 AccountList.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  hasFailed: PropTypes.bool.isRequired,
+  error: PropTypes.object.isRequired,
   accounts: PropTypes.array.isRequired,
   fetchAccountsRequest: PropTypes.func.isRequired
 }

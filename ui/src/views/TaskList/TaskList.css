@@ -1,0 +1,15 @@
+.header-smaller-font {
+  font-size: 0.8em;
+}
+
+.table-header-cell-unsortable {
+  cursor: default !important;
+}
+
+.table-row-urgent-task {
+  color: red;
+}
+
+.icon-action {
+  cursor: pointer;
+}

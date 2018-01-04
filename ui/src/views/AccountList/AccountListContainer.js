@@ -6,7 +6,7 @@ import { fetchAccountsRequest } from 'store/modules/accounts'
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
   isFetching: state.accounts.get('isFetching'),
-  hasFailed: state.accounts.get('hasFailed'),
+  error: state.accounts.get('error'),
   accounts: state.accounts.get('ids').map(id => state.accounts.getIn(['byId', id]))
 })
 
