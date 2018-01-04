@@ -6,10 +6,6 @@
   cursor: default !important;
 }
 
-.table-row-urgent-task {
-  color: red;
-}
-
 .icon-action {
   cursor: pointer;
 }

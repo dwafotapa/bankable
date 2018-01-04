@@ -24,8 +24,7 @@ class TaskList extends Component {
   }
 
   componentDidMount() {
-    const { accountId } = this.props.match.params
-    this.props.fetchTasksRequest(accountId)
+    this.props.fetchTasksRequest(this.props.match.params.accountId)
   }
 
   handleSortBy = fieldName => () => {
@@ -75,18 +74,21 @@ class TaskList extends Component {
             <Table.Row>
               <Table.HeaderCell sorted={column === 'type' ? direction : null} onClick={this.handleSortBy('type')}>Type</Table.HeaderCell>
               <Table.HeaderCell sorted={column === 'status' ? direction : null} onClick={this.handleSortBy('status')}>Status</Table.HeaderCell>
-              <Table.HeaderCell sorted={column === 'dueDate' ? direction : null} onClick={this.handleSortBy('dueDate')}>Due Date</Table.HeaderCell>
-              <Table.HeaderCell sorted={column === 'snoozedUntil' ? direction : null} onClick={this.handleSortBy('snoozedUntil')}>Snoozed Until</Table.HeaderCell>
-              <Table.HeaderCell className="table-header-cell-unsortable">Actions<br/><Icon name="wait"/>= Snooze<br/><Icon name="close"/>= Close</Table.HeaderCell>
+              <Table.HeaderCell sorted={column === 'dueDate' ? direction : null} onClick={this.handleSortBy('dueDate')} textAlign="right">Due Date</Table.HeaderCell>
+              <Table.HeaderCell sorted={column === 'snoozedUntil' ? direction : null} onClick={this.handleSortBy('snoozedUntil')} textAlign="right">Snoozed Until</Table.HeaderCell>
+              <Table.HeaderCell className="table-header-cell-unsortable" textAlign="right">Actions<br/><Icon name="wait"/>= Snooze<br/><Icon name="close"/>= Close</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {tasks.map(task =>
-              <Table.Row key={task.id} className={new Date(task.dueDate) < new Date() ? "table-row-urgent" : ""}>
+              <Table.Row key={task.id}>
                 <Table.Cell>{task.type}</Table.Cell>
                 <Table.Cell>{task.status}</Table.Cell>
-                <Table.Cell>{(task.dueDate && new Date(task.dueDate).toLocaleDateString()) || ''}</Table.Cell>
-                <Table.Cell>{(task.snoozedUntil && new Date(task.snoozedUntil).toLocaleDateString()) || ''}</Table.Cell>
+                <Table.Cell textAlign="right">
+                  {new Date(task.dueDate) < new Date() && <Icon name="attention"/>}
+                  {task.dueDate && new Date(task.dueDate).toLocaleDateString()}
+                </Table.Cell>
+                <Table.Cell textAlign="right">{task.snoozedUntil && new Date(task.snoozedUntil).toLocaleDateString()}</Table.Cell>
                 <Table.Cell textAlign="right">
                   {task.status !== 'CLOSED' && task.status !== 'SNOOZED' && <Icon name="wait" className="icon-action" onClick={() => this.handleSnoozeIconClick(task.id)}/>}
                   {task.status !== 'CLOSED' && <Icon name="close" className="icon-action" onClick={() => this.handleCloseIconClick(task.id)}/>}

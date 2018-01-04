@@ -66,7 +66,7 @@ const closeTaskSuccess = (accountId, taskId) => ({
 
 const taskEntity = new schema.Entity(
   'tasks',
-  { tasks: {} },
+  {},
   {
     processStrategy: (entity) => ({
       id: entity.id,
@@ -100,8 +100,9 @@ export function* fetchTask({ accountId, taskId }) {
   try {
     const { bankerId } = yield select()
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}`)
-    const json = yield call(handleResponse, response)
-    yield put(fetchTaskSuccess(json))
+    const task = yield call(handleResponse, response)
+    const normalized = normalize(task, taskEntity)
+    yield put(fetchTaskSuccess(normalized.entities.tasks[normalized.result]))
   } catch (error) {
     yield put(fetchTaskFailure(error))
   }
@@ -156,32 +157,17 @@ const reducer = (state = initialState, action) => {
         byId: action.byId
       })
     case FETCH_TASK_REQUEST:
-      return state.merge({
-        isFetching: true,
-        error: {}
-      })
+      return state.merge({ error: {} })
     case FETCH_TASK_FAILURE:
-      return state.merge({
-        isFetching: false,
-        error: action.error
-      })
+      return state.merge({ error: action.error })
     case FETCH_TASK_SUCCESS:
-      return state.merge({
-        isFetching: false,
-        byId: state.get('byId').set(action.task.id, action.task)
-      })
+      return state.merge({ byId: state.get('byId').set(action.task.id, action.task) })
     case CLOSE_TASK_REQUEST:
-      return state.merge({
-        isFetching: true,
-        error: {}
-      })
+      return state.merge({ error: {} })
     case CLOSE_TASK_FAILURE:
-      return state.merge({
-        isFetching: false,
-        error: action.error
-      })
+      return state.merge({ error: action.error })
     case CLOSE_TASK_SUCCESS:
-      return state.merge({ isFetching: false })
+      return state
     default:
       return state
   }

@@ -48,7 +48,7 @@ const resetAccountsSuccess = () => ({
 
 const accountEntity = new schema.Entity(
   'accounts',
-  { accounts: {} },
+  {},
   {
     idAttribute: 'number',
     processStrategy: (entity) => ({
