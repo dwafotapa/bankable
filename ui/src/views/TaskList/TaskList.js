@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Header, Icon, Button, Table, Confirm } from 'semantic-ui-react'
+import { Confirm, Container, Grid, Header, Icon, Table } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import sortBy from 'lodash/sortBy'
 import './TaskList.css'
@@ -100,6 +100,11 @@ class TaskList extends Component {
     return (
       <Container>
         <Header as="h3" block textAlign="center">Account<br/><span className="header-smaller-font">{account.id} - {account.companyName}</span></Header>
+        <Grid>
+          <Grid.Column>
+            <Link to="/accounts" className="ui primary button"><Icon name="chevron left"/>Your Accounts</Link>
+          </Grid.Column>
+        </Grid>
         <Table sortable celled fixed>
           <Table.Header>
             <Table.Row>
@@ -132,7 +137,6 @@ class TaskList extends Component {
             )}
           </Table.Body>
         </Table>
-        <Button><Link to="/accounts"><Icon name="chevron left"/>Your Accounts</Link></Button>
         <Confirm
           open={isSnoozeModalOpen}
           content="Snooze until next week?"

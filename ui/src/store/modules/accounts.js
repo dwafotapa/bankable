@@ -4,24 +4,24 @@ import { schema, normalize } from 'normalizr'
 import { fromJS } from 'immutable'
 import { handleResponse } from 'utils/fetch'
 
-const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
-const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
-const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
-const SET_ACCOUNT_TASKS = 'SET_ACCOUNT_TASKS'
-const RESET_ACCOUNTS_REQUEST = 'RESET_ACCOUNTS_REQUEST'
-const RESET_ACCOUNTS_FAILURE = 'RESET_ACCOUNTS_FAILURE'
-const RESET_ACCOUNTS_SUCCESS = 'RESET_ACCOUNTS_SUCCESS'
+export const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
+export const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
+export const FETCH_ACCOUNTS_SUCCESS = 'FETCH_ACCOUNTS_SUCCESS'
+export const SET_ACCOUNT_TASKS = 'SET_ACCOUNT_TASKS'
+export const RESET_ACCOUNTS_REQUEST = 'RESET_ACCOUNTS_REQUEST'
+export const RESET_ACCOUNTS_FAILURE = 'RESET_ACCOUNTS_FAILURE'
+export const RESET_ACCOUNTS_SUCCESS = 'RESET_ACCOUNTS_SUCCESS'
 
 export const fetchAccountsRequest = () => ({
   type: FETCH_ACCOUNTS_REQUEST
 })
 
-const fetchAccountsFailure = (error) => ({
+export const fetchAccountsFailure = (error) => ({
   type: FETCH_ACCOUNTS_FAILURE,
   error
 })
 
-const fetchAccountsSuccess = (ids, byId) => ({
+export const fetchAccountsSuccess = (ids, byId) => ({
   type: FETCH_ACCOUNTS_SUCCESS,
   ids,
   byId
@@ -37,12 +37,12 @@ export const resetAccountsRequest = () => ({
   type: RESET_ACCOUNTS_REQUEST
 })
 
-const resetAccountsFailure = (error) => ({
+export const resetAccountsFailure = (error) => ({
   type: RESET_ACCOUNTS_FAILURE,
   error
 })
 
-const resetAccountsSuccess = () => ({
+export const resetAccountsSuccess = () => ({
   type: RESET_ACCOUNTS_SUCCESS
 })
 

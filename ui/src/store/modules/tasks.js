@@ -5,30 +5,30 @@ import { fromJS } from 'immutable'
 import { handleResponse } from 'utils/fetch'
 import { setAccountTasks } from './accounts'
 
-const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST'
-const FETCH_TASKS_FAILURE = 'FETCH_TASKS_FAILURE'
-const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS'
-const FETCH_TASK_REQUEST = 'FETCH_TASK_REQUEST'
-const FETCH_TASK_FAILURE = 'FETCH_TASK_FAILURE'
-const FETCH_TASK_SUCCESS = 'FETCH_TASK_SUCCESS'
-const CLOSE_TASK_REQUEST = 'CLOSE_TASK_REQUEST'
-const CLOSE_TASK_FAILURE = 'CLOSE_TASK_FAILURE'
-const CLOSE_TASK_SUCCESS = 'CLOSE_TASK_SUCCESS'
-const SNOOZE_TASK_REQUEST = 'SNOOZE_TASK_REQUEST'
-const SNOOZE_TASK_FAILURE = 'SNOOZE_TASK_FAILURE'
-const SNOOZE_TASK_SUCCESS = 'SNOOZE_TASK_SUCCESS'
+export const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST'
+export const FETCH_TASKS_FAILURE = 'FETCH_TASKS_FAILURE'
+export const FETCH_TASKS_SUCCESS = 'FETCH_TASKS_SUCCESS'
+export const FETCH_TASK_REQUEST = 'FETCH_TASK_REQUEST'
+export const FETCH_TASK_FAILURE = 'FETCH_TASK_FAILURE'
+export const FETCH_TASK_SUCCESS = 'FETCH_TASK_SUCCESS'
+export const CLOSE_TASK_REQUEST = 'CLOSE_TASK_REQUEST'
+export const CLOSE_TASK_FAILURE = 'CLOSE_TASK_FAILURE'
+export const CLOSE_TASK_SUCCESS = 'CLOSE_TASK_SUCCESS'
+export const SNOOZE_TASK_REQUEST = 'SNOOZE_TASK_REQUEST'
+export const SNOOZE_TASK_FAILURE = 'SNOOZE_TASK_FAILURE'
+export const SNOOZE_TASK_SUCCESS = 'SNOOZE_TASK_SUCCESS'
 
 export const fetchTasksRequest = (accountId) => ({
   type: FETCH_TASKS_REQUEST,
   accountId
 })
 
-const fetchTasksFailure = (error) => ({
+export const fetchTasksFailure = (error) => ({
   type: FETCH_TASKS_FAILURE,
   error
 })
 
-const fetchTasksSuccess = (ids, byId) => ({
+export const fetchTasksSuccess = (ids, byId) => ({
   type: FETCH_TASKS_SUCCESS,
   ids,
   byId
@@ -40,12 +40,12 @@ export const fetchTaskRequest = (accountId, taskId) => ({
   taskId
 })
 
-const fetchTaskFailure = (error) => ({
+export const fetchTaskFailure = (error) => ({
   type: FETCH_TASK_FAILURE,
   error
 })
 
-const fetchTaskSuccess = (task) => ({
+export const fetchTaskSuccess = (task) => ({
   type: FETCH_TASK_SUCCESS,
   task
 })
@@ -56,12 +56,12 @@ export const closeTaskRequest = (accountId, taskId) => ({
   taskId
 })
 
-const closeTaskFailure = (error) => ({
+export const closeTaskFailure = (error) => ({
   type: CLOSE_TASK_FAILURE,
   error
 })
 
-const closeTaskSuccess = () => ({
+export const closeTaskSuccess = () => ({
   type: CLOSE_TASK_SUCCESS
 })
 
@@ -71,12 +71,12 @@ export const snoozeTaskRequest = (accountId, taskId) => ({
   taskId
 })
 
-const snoozeTaskFailure = (error) => ({
+export const snoozeTaskFailure = (error) => ({
   type: SNOOZE_TASK_FAILURE,
   error
 })
 
-const snoozeTaskSuccess = () => ({
+export const snoozeTaskSuccess = () => ({
   type: SNOOZE_TASK_SUCCESS
 })
 

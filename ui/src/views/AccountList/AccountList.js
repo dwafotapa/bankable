@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Container, Header, List, Button } from 'semantic-ui-react'
+import { Button, Container, Grid, Header, List, Segment } from 'semantic-ui-react'
 
 class AccountList extends Component {
   componentDidMount() {
@@ -13,7 +13,7 @@ class AccountList extends Component {
   }
 
   render() {
-    const { isFetching, error, accounts } = this.props
+    const { isFetching, error, accounts, resetAccountsRequest } = this.props
     if (isFetching) {
       return <Container>Loading...</Container>
     }
@@ -29,17 +29,23 @@ class AccountList extends Component {
     return (
       <Container>
         <Header as="h3" block textAlign="center">Your Accounts</Header>
-        <List animated divided relaxed>
-          {accounts.map(account =>
-            <List.Item key={account.id}>
-              <List.Content>
-                <List.Header><Link to={`/accounts/${account.id}/tasks`}>{account.id}</Link></List.Header>
-                <List.Description>{account.companyName}</List.Description>
-              </List.Content>
-            </List.Item>
-          )}
-        </List>
-        <Button onClick={this.handleResetButtonClick}>Reset</Button>
+        <Segment>
+          <List divided relaxed>
+            {accounts.map(account =>
+              <List.Item key={account.id}>
+                <List.Content>
+                  <List.Header><Link to={`/accounts/${account.id}/tasks`}>{account.id}</Link></List.Header>
+                  <List.Description>{account.companyName}</List.Description>
+                </List.Content>
+              </List.Item>
+            )}
+          </List>
+        </Segment>
+        <Grid>
+          <Grid.Column textAlign="right">
+            <Button onClick={resetAccountsRequest} primary>Reset Your Accounts</Button>
+          </Grid.Column>
+        </Grid>
       </Container>
     )
   }
