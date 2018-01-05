@@ -1,14 +1,25 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Header, Icon, Button, Table } from 'semantic-ui-react'
+import { Container, Header, Icon, Button, Table, Confirm } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import sortBy from 'lodash/sortBy'
 import './TaskList.css'
+
+const isTaskUrgent = (task) => {
+  if (task.status === 'CLOSED') {
+    return false
+  }
+
+  const now = new Date(), dueDate = new Date(task.dueDate), snoozedUntilDate = new Date(task.snoozedUntil)
+  return now > dueDate && (!task.snoozedUntil || now > snoozedUntilDate)
+}
 
 class TaskList extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isSnoozeModalOpen: false,
+      selectedTaskId: '',
       column: '',
       direction: '',
       tasks: []
@@ -45,14 +56,34 @@ class TaskList extends Component {
     })
   }
 
-  handleCloseIconClick = (taskId) => {
-    this.props.closeTaskRequest(this.props.account.id, taskId)
+  handleCloseIconClick = (selectedTaskId) => {
+    this.props.closeTaskRequest(this.props.account.id, selectedTaskId)
+    this.setState({ selectedTaskId })
   }
 
-  handleSnoozeIconClick = (taskId) => {}
+  handleSnoozeIconClick = (selectedTaskId) => {
+    this.setState({
+      isSnoozeModalOpen: true,
+      selectedTaskId
+    })
+  }
+
+  handleSnoozeModalCancel = () => {
+    this.setState({
+      isSnoozeModalOpen: false,
+    })
+  }
+
+  handleSnoozeModalConfirm = () => {
+    // Commented out as I'm getting "Invalid CORS request" errors when trying to snooze a task. Seems to be a problem on the server.
+    // this.props.snoozeTaskRequest(this.props.account.id, this.state.selectedTaskId)
+    this.setState({
+      isSnoozeModalOpen: false,
+    })
+  }
 
   render() {
-    const { column, direction, tasks } = this.state
+    const { isSnoozeModalOpen, selectedTaskId, column, direction, tasks } = this.state
     const { isFetching, error, account } = this.props
     if (isFetching) {
       return <Container>Loading...</Container>
@@ -63,7 +94,7 @@ class TaskList extends Component {
     }
 
     if (tasks.length === 0) {
-      return <Container>No matches found.</Container>
+      return <Container>No tasks found.</Container>
     }
 
     return (
@@ -81,11 +112,15 @@ class TaskList extends Component {
           </Table.Header>
           <Table.Body>
             {tasks.map(task =>
-              <Table.Row key={task.id}>
+              <Table.Row
+                key={task.id}
+                active={task.id === selectedTaskId}
+                warning={isTaskUrgent(task)}
+              >
                 <Table.Cell>{task.type}</Table.Cell>
                 <Table.Cell>{task.status}</Table.Cell>
                 <Table.Cell textAlign="right">
-                  {new Date(task.dueDate) < new Date() && <Icon name="attention"/>}
+                  {isTaskUrgent(task) && <Icon name="attention"/>}
                   {task.dueDate && new Date(task.dueDate).toLocaleDateString()}
                 </Table.Cell>
                 <Table.Cell textAlign="right">{task.snoozedUntil && new Date(task.snoozedUntil).toLocaleDateString()}</Table.Cell>
@@ -98,6 +133,12 @@ class TaskList extends Component {
           </Table.Body>
         </Table>
         <Button><Link to="/accounts"><Icon name="chevron left"/>Your Accounts</Link></Button>
+        <Confirm
+          open={isSnoozeModalOpen}
+          content="Snooze until next week?"
+          onCancel={this.handleSnoozeModalCancel}
+          onConfirm={this.handleSnoozeModalConfirm}
+        />
       </Container>
     )
   }
@@ -108,7 +149,8 @@ TaskList.propTypes = {
   error: PropTypes.object.isRequired,
   tasks: PropTypes.array.isRequired,
   fetchTasksRequest: PropTypes.func.isRequired,
-  closeTaskRequest: PropTypes.func.isRequired
+  closeTaskRequest: PropTypes.func.isRequired,
+  snoozeTaskRequest: PropTypes.func.isRequired
 }
 
 export default TaskList

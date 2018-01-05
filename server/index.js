@@ -5,12 +5,12 @@ const { API_BASE_URL, PORT } = require('./config')
 
 const app = express()
 
-app.use(morgan('dev'));
+app.use(morgan('dev'))
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+  res.header('Access-Control-Allow-Origin', '*')
+  next()
+})
 
 app.use('/api/v1', (req, res) => {
   const url = API_BASE_URL + req.url

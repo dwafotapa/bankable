@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { all, fork } from 'redux-saga/effects'
 import bankerId from './bankerId'
 import accounts, { watchFetchAccountsRequest, watchResetAccountsRequest } from './accounts'
-import tasks, { watchFetchTasksRequest, watchFetchTaskRequest, watchCloseTaskRequest } from './tasks'
+import tasks, { watchFetchTasksRequest, watchFetchTaskRequest, watchCloseTaskRequest, watchSnoozeTaskRequest } from './tasks'
 
 export function* rootSaga() {
   yield all([
@@ -10,7 +10,8 @@ export function* rootSaga() {
     fork(watchFetchTasksRequest),
     fork(watchFetchTaskRequest),
     fork(watchCloseTaskRequest),
-    fork(watchResetAccountsRequest)
+    fork(watchResetAccountsRequest),
+    fork(watchSnoozeTaskRequest)
   ])
 }
 

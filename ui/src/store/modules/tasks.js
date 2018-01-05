@@ -14,6 +14,9 @@ const FETCH_TASK_SUCCESS = 'FETCH_TASK_SUCCESS'
 const CLOSE_TASK_REQUEST = 'CLOSE_TASK_REQUEST'
 const CLOSE_TASK_FAILURE = 'CLOSE_TASK_FAILURE'
 const CLOSE_TASK_SUCCESS = 'CLOSE_TASK_SUCCESS'
+const SNOOZE_TASK_REQUEST = 'SNOOZE_TASK_REQUEST'
+const SNOOZE_TASK_FAILURE = 'SNOOZE_TASK_FAILURE'
+const SNOOZE_TASK_SUCCESS = 'SNOOZE_TASK_SUCCESS'
 
 export const fetchTasksRequest = (accountId) => ({
   type: FETCH_TASKS_REQUEST,
@@ -58,10 +61,23 @@ const closeTaskFailure = (error) => ({
   error
 })
 
-const closeTaskSuccess = (accountId, taskId) => ({
-  type: CLOSE_TASK_SUCCESS,
+const closeTaskSuccess = () => ({
+  type: CLOSE_TASK_SUCCESS
+})
+
+export const snoozeTaskRequest = (accountId, taskId) => ({
+  type: SNOOZE_TASK_REQUEST,
   accountId,
   taskId
+})
+
+const snoozeTaskFailure = (error) => ({
+  type: SNOOZE_TASK_FAILURE,
+  error
+})
+
+const snoozeTaskSuccess = () => ({
+  type: SNOOZE_TASK_SUCCESS
 })
 
 const taskEntity = new schema.Entity(
@@ -72,7 +88,7 @@ const taskEntity = new schema.Entity(
       id: entity.id,
       description: entity.description,
       dueDate: entity.due_date,
-      snoozedUntil: entity.snoozed_until,
+      snoozedUntil: entity.snoozed_until || null,
       status: entity.status,
       type: entity.type
     })
@@ -120,7 +136,7 @@ export function* closeTask({ accountId, taskId }) {
       { method: 'POST' }
     )
     yield call(handleResponse, response, false)
-    yield put(closeTaskSuccess(accountId, taskId))
+    yield put(closeTaskSuccess())
     yield put(fetchTaskRequest(accountId, taskId))
   } catch (error) {
     yield put(closeTaskFailure(error))
@@ -129,6 +145,31 @@ export function* closeTask({ accountId, taskId }) {
 
 export function* watchCloseTaskRequest() {
   yield takeEvery(CLOSE_TASK_REQUEST, closeTask)
+}
+
+export function* snoozeTask({ accountId, taskId }) {
+  try {
+    const { bankerId } = yield select()
+    const response = yield call(fetch,
+      `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/snooze`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ snoozedUntil: (Date.now() + 7 * 24 * 3600 * 1000).toString() }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    yield call(handleResponse, response, false)
+    yield put(snoozeTaskSuccess())
+    yield put(fetchTaskRequest(accountId, taskId))
+  } catch (error) {
+    yield put(snoozeTaskFailure(error))
+  }
+}
+
+export function* watchSnoozeTaskRequest() {
+  yield takeEvery(SNOOZE_TASK_REQUEST, snoozeTask)
 }
 
 const initialState = fromJS({
@@ -167,6 +208,12 @@ const reducer = (state = initialState, action) => {
     case CLOSE_TASK_FAILURE:
       return state.merge({ error: action.error })
     case CLOSE_TASK_SUCCESS:
+      return state
+    case SNOOZE_TASK_REQUEST:
+      return state.merge({ error: {} })
+    case SNOOZE_TASK_FAILURE:
+      return state.merge({ error: action.error })
+    case SNOOZE_TASK_SUCCESS:
       return state
     default:
       return state

@@ -29,7 +29,7 @@ class AccountList extends Component {
     return (
       <Container>
         <Header as="h3" block textAlign="center">Your Accounts</Header>
-        <List divided relaxed>
+        <List animated divided relaxed>
           {accounts.map(account =>
             <List.Item key={account.id}>
               <List.Content>

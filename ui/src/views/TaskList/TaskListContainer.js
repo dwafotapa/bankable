@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { toJS } from 'utils/to-js'
 import TaskList from './TaskList'
-import { fetchTasksRequest, closeTaskRequest } from 'store/modules/tasks'
+import { fetchTasksRequest, closeTaskRequest, snoozeTaskRequest } from 'store/modules/tasks'
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,
@@ -14,6 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => ({
   fetchTasksRequest: (accountId) => dispatch(fetchTasksRequest(accountId)),
   closeTaskRequest: (accountId, taskId) => dispatch(closeTaskRequest(accountId, taskId)),
+  snoozeTaskRequest: (accountId, taskId) => dispatch(snoozeTaskRequest(accountId, taskId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(toJS(TaskList))
