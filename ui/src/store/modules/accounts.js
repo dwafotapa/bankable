@@ -3,6 +3,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
 import { fromJS } from 'immutable'
 import { handleResponse } from 'utils/fetch'
+import { getBankerId } from './bankers'
 
 export const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
 export const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
@@ -60,7 +61,7 @@ const accountEntity = new schema.Entity(
 
 export function* fetchAccounts() {
   try {
-    const { bankerId } = yield select()
+    const bankerId = yield select(getBankerId)
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts`)
     const json = yield call(handleResponse, response)
     const normalized = normalize(json.accounts, new schema.Array(accountEntity))
@@ -76,7 +77,7 @@ export function* watchFetchAccountsRequest() {
 
 export function* resetAccounts() {
   try {
-    const { bankerId } = yield select()    
+    const bankerId = yield select(getBankerId)
     const response = yield call(fetch,
       `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/reset`,
       { method: 'POST' }

@@ -3,6 +3,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
 import { fromJS } from 'immutable'
 import { handleResponse } from 'utils/fetch'
+import { getBankerId } from './bankers'
 import { setAccountTasks } from './accounts'
 
 export const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST'
@@ -97,7 +98,7 @@ const taskEntity = new schema.Entity(
 
 export function* fetchTasks({ accountId }) {
   try {
-    const { bankerId } = yield select()
+    const bankerId = yield select(getBankerId)
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks`)
     const json = yield call(handleResponse, response)
     const normalized = normalize(json.tasks, new schema.Array(taskEntity))
@@ -114,7 +115,7 @@ export function* watchFetchTasksRequest() {
 
 export function* fetchTask({ accountId, taskId }) {
   try {
-    const { bankerId } = yield select()
+    const bankerId = yield select(getBankerId)
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}`)
     const task = yield call(handleResponse, response)
     const normalized = normalize(task, taskEntity)
@@ -130,7 +131,7 @@ export function* watchFetchTaskRequest() {
 
 export function* closeTask({ accountId, taskId }) {
   try {
-    const { bankerId } = yield select()
+    const bankerId = yield select(getBankerId)
     const response = yield call(fetch,
       `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/close`,
       { method: 'POST' }
@@ -149,7 +150,7 @@ export function* watchCloseTaskRequest() {
 
 export function* snoozeTask({ accountId, taskId }) {
   try {
-    const { bankerId } = yield select()
+    const bankerId = yield select(getBankerId)
     const response = yield call(fetch,
       `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/snooze`,
       {

@@ -7,7 +7,7 @@ const Home = (props) => (
   <Container>
     <Header as="h3" block textAlign="center">Home</Header>
     <Segment>
-      <p>You are logged in as <strong>{props.bankerId}</strong></p>
+      <p>You are signed in as <strong>{props.bankerId}</strong></p>
     </Segment>
     <Grid>
       <Grid.Column textAlign="right">

@@ -14,6 +14,8 @@ export const setBankerId = (id) => ({
   id
 })
 
+export const getBankerId = (state) => state.bankers.get('bankerId')
+
 const initialState = fromJS({
   bankerId: '',
   ids: []
