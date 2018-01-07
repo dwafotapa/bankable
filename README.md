@@ -1,5 +1,5 @@
 # Bankable
-Bankable is a bank account management app built with [React](https://reactjs.org/), [Redux](https://redux.js.org/) and [Redux-Saga](https://redux-saga.js.org/) and gives an interface to internal users (aka bankers) to perform customer-related tasks.
+Bankable is a bank account management app built with [React](https://reactjs.org/) and [Redux](https://redux.js.org/) and gives an interface to internal users (aka bankers) to perform customer-related tasks.
 
 ## Getting Started
 
@@ -50,6 +50,7 @@ Then open [http://localhost:3000/](http://localhost:3000/) to see your app.
 - React
 - Redux
 - Redux-Saga
+- Semantic UI React
 - Webpack
 
 ## Credits
