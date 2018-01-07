@@ -7,10 +7,10 @@ import tasks, { watchFetchTasksRequest, watchFetchTaskRequest, watchCloseTaskReq
 export function* rootSaga() {
   yield all([
     fork(watchFetchAccountsRequest),
+    fork(watchResetAccountsRequest),
     fork(watchFetchTasksRequest),
     fork(watchFetchTaskRequest),
     fork(watchCloseTaskRequest),
-    fork(watchResetAccountsRequest),
     fork(watchSnoozeTaskRequest)
   ])
 }
