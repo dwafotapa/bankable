@@ -1,5 +1,4 @@
 import React from 'react'
-import configureMockStore from 'redux-mock-store'
 import saga from 'redux-saga'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
@@ -8,9 +7,6 @@ import uuid from 'uuid'
 import { handleResponse } from 'utils/fetch'
 import reducer, * as moduleObj from './accounts'
 import { getBankerId } from './bankers'
-
-const middlewares = [ saga ]
-const mockStore = configureMockStore(middlewares)
 
 describe('accounts', () => {
   describe('fetchAccountsRequest()', () => {
@@ -97,12 +93,6 @@ describe('accounts', () => {
 
   describe('fetchAccounts()', () => {  
     it('should dispatch a FETCH_ACCOUNTS_FAILURE action if the request fails', () => {
-      global.fetch = jest.fn().mockImplementation(() => {
-        return new Promise((resolve, reject) => {
-          reject({ ok: false })
-        })
-      })
-
       const generator = moduleObj.fetchAccounts()
       expect(generator.next().value).toEqual(select(getBankerId))
       
@@ -114,15 +104,11 @@ describe('accounts', () => {
 
       const error = new Error()
       expect(generator.throw(error).value).toEqual(put(moduleObj.fetchAccountsFailure(error)))
+      
+      expect(generator.next().done).toBe(true)
     })
 
     it('should dispatch a FETCH_ACCOUNTS_SUCCESS action if the request succeeds', () => {
-      global.fetch = jest.fn().mockImplementation(() => {
-        return new Promise((resolve, reject) => {
-          reject({ ok: true })
-        })
-      })
-
       const generator = moduleObj.fetchAccounts()
       expect(generator.next().value).toEqual(select(getBankerId))
       
@@ -140,6 +126,8 @@ describe('accounts', () => {
       }
       const normalized = normalize(json.accounts, new schema.Array(moduleObj.accountEntity))
       expect(generator.next(json).value).toEqual(put(moduleObj.fetchAccountsSuccess(normalized.result, normalized.entities.accounts)))
+      
+      expect(generator.next().done).toBe(true)
     })
   })
 

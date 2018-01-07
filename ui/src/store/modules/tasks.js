@@ -1,7 +1,7 @@
 import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
-import { fromJS } from 'immutable'
+import { fromJS, Map } from 'immutable'
 import { handleResponse } from 'utils/fetch'
 import { getBankerId } from './bankers'
 import { setAccountTasks } from './accounts'
@@ -81,7 +81,7 @@ export const snoozeTaskSuccess = () => ({
   type: SNOOZE_TASK_SUCCESS
 })
 
-const taskEntity = new schema.Entity(
+export const taskEntity = new schema.Entity(
   'tasks',
   {},
   {
@@ -155,7 +155,7 @@ export function* snoozeTask({ accountId, taskId }) {
       `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/snooze`,
       {
         method: 'POST',
-        body: JSON.stringify({ snoozedUntil: (Date.now() + 7 * 24 * 3600 * 1000).toString() }),
+        body: JSON.stringify({ snoozedUntil: (Date.now() + 7 * 24 * 3600 * 1000).toString() }), // snooze until next week
         headers: {
           'Content-Type': 'application/json'
         }
@@ -203,7 +203,7 @@ const reducer = (state = initialState, action) => {
     case FETCH_TASK_FAILURE:
       return state.merge({ error: action.error })
     case FETCH_TASK_SUCCESS:
-      return state.merge({ byId: state.get('byId').set(action.task.id, action.task) })
+      return state.merge({ byId: state.get('byId').set(action.task.id, Map(action.task)) })
     case CLOSE_TASK_REQUEST:
       return state.merge({ error: {} })
     case CLOSE_TASK_FAILURE:
