@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { Button, Container, Divider, Dropdown, Grid, Header, Segment } from 'semantic-ui-react'
-import { toJS } from 'utils/to-js'
-import { getBankerId, getBankerIds, resetBankerId, setBankerId } from 'store/modules/bankers'
 
 const getDropdownOptions = (bankerIds) => {
   return bankerIds.map(id => ({
@@ -46,44 +44,40 @@ class Home extends Component {
           </Grid.Column>
         </Grid>
         {
-          bankerId
-          ? null
-          : <div>
-              <Divider horizontal>Or</Divider>
-              <Grid textAlign="center">
-                <Grid.Column>
-                  <Dropdown
-                    placeholder="Sign in as"
-                    selection
-                    options={getDropdownOptions(bankerIds)}
-                    value={this.state.dropdownValue}
-                    onChange={this.handleDropdownChange}
-                  />
-                  <span> </span>
-                  <Button
-                    primary
-                    disabled={!this.state.dropdownValue}
-                    onClick={() => setBankerId(this.state.dropdownValue)}
-                  >
-                    Sign in
-                  </Button>
-                </Grid.Column>
-              </Grid>
-            </div>
+          !bankerId &&
+          <div>
+            <Divider horizontal>Or</Divider>
+            <Grid textAlign="center">
+              <Grid.Column>
+                <Dropdown
+                  placeholder="Sign in as"
+                  selection
+                  options={getDropdownOptions(bankerIds)}
+                  value={this.state.dropdownValue}
+                  onChange={this.handleDropdownChange}
+                />
+                <span> </span>
+                <Button
+                  primary
+                  disabled={!this.state.dropdownValue}
+                  onClick={() => setBankerId(this.state.dropdownValue)}
+                >
+                  Sign in
+                </Button>
+              </Grid.Column>
+            </Grid>
+          </div>
         }
       </Container>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  bankerId: getBankerId(state),
-  bankerIds: getBankerIds(state)
-})
+Home.propTypes = {
+  bankerId: PropTypes.string.isRequired,
+  bankerIds: PropTypes.array.isRequired,
+  resetBankerId: PropTypes.func.isRequired,
+  setBankerId: PropTypes.func.isRequired
+}
 
-const mapDispatchToProps = (dispatch) => ({
-  resetBankerId: () => dispatch(resetBankerId()),
-  setBankerId: (id) => dispatch(setBankerId(id))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(toJS(Home))
+export default Home

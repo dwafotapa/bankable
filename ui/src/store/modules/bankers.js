@@ -27,7 +27,7 @@ const reducer = (state = initialState, action) => {
     case RESET_BANKER_ID:
       return state.merge({
         bankerId: action.id,
-        ids: state.get('ids').push(action.id)
+        ids: state.get('ids').unshift(action.id)
       })
     case SET_BANKER_ID:
       return state.merge({

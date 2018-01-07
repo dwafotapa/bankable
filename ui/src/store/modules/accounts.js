@@ -1,7 +1,7 @@
 import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { schema, normalize } from 'normalizr'
-import { fromJS } from 'immutable'
+import { fromJS, List } from 'immutable'
 import { handleResponse } from 'utils/fetch'
 import { getBankerId } from './bankers'
 
@@ -47,7 +47,7 @@ export const resetAccountsSuccess = () => ({
   type: RESET_ACCOUNTS_SUCCESS
 })
 
-const accountEntity = new schema.Entity(
+export const accountEntity = new schema.Entity(
   'accounts',
   {},
   {
@@ -121,7 +121,7 @@ const reducer = (state = initialState, action) => {
       })
     case SET_ACCOUNT_TASKS:
       return state.merge({
-        byId: state.get('byId').setIn([action.accountId, 'taskIds'], action.taskIds)
+        byId: state.get('byId').setIn([action.accountId, 'taskIds'], List(action.taskIds))
       })
     case RESET_ACCOUNTS_REQUEST:
       return state.merge({
@@ -134,7 +134,7 @@ const reducer = (state = initialState, action) => {
         error: action.error
       })
     case RESET_ACCOUNTS_SUCCESS:
-      return state.merge({ isFetching: false })
+      return state
     default:
       return state
   }
