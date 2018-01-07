@@ -42,7 +42,7 @@ class AccountList extends Component {
           </List>
         </Segment>
         <Grid>
-          <Grid.Column textAlign="right">
+          <Grid.Column textAlign="center">
             <Button onClick={resetAccountsRequest} primary>Reset Your Accounts</Button>
           </Grid.Column>
         </Grid>

@@ -3,8 +3,7 @@ import { toJS } from 'utils/to-js'
 import AccountList from './AccountList'
 import { fetchAccountsRequest, resetAccountsRequest } from 'store/modules/accounts'
 
-const mapStateToProps = (state, ownProps) => ({
-  ...ownProps,
+const mapStateToProps = (state) => ({
   isFetching: state.accounts.get('isFetching'),
   error: state.accounts.get('error'),
   accounts: state.accounts.get('ids').map(id => state.accounts.getIn(['byId', id]))

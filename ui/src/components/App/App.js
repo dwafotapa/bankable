@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { Grid } from 'semantic-ui-react'
+import PrivateRoute from 'components/PrivateRoute/PrivateRoute'
 import MenuWrapper from 'components/MenuWrapper/MenuWrapper'
 import MainWrapper from 'components/MainWrapper/MainWrapper'
 import Home from 'views/Home/Home'
@@ -13,8 +14,8 @@ const App = () => (
       <MenuWrapper/>
       <MainWrapper>
         <Switch>
-          <Route path="/accounts/:accountId/tasks" component={TaskListContainer}/>
-          <Route path="/accounts" component={AccountListContainer}/>
+          <PrivateRoute path="/accounts/:accountId/tasks" component={TaskListContainer}/>
+          <PrivateRoute path="/accounts" component={AccountListContainer}/>
           <Route exact path="/" component={Home}/>
         </Switch>
       </MainWrapper>
