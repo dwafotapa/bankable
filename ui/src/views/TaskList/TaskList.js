@@ -75,8 +75,7 @@ class TaskList extends Component {
   }
 
   handleSnoozeModalConfirm = () => {
-    // Commented out as I'm getting "Invalid CORS request" errors when trying to snooze a task. Seems to be a problem on the server.
-    // this.props.snoozeTaskRequest(this.props.account.id, this.state.selectedTaskId)
+    this.props.snoozeTaskRequest(this.props.account.id, this.state.selectedTaskId)
     this.setState({
       isSnoozeModalOpen: false,
     })
@@ -130,7 +129,7 @@ class TaskList extends Component {
                 </Table.Cell>
                 <Table.Cell textAlign="right">{task.snoozedUntil && new Date(task.snoozedUntil).toLocaleDateString()}</Table.Cell>
                 <Table.Cell textAlign="right">
-                  {task.status !== 'CLOSED' && task.status !== 'SNOOZED' && <Icon name="wait" className="icon-action" onClick={() => this.handleSnoozeIconClick(task.id)}/>}
+                  {task.status !== 'CLOSED' && <Icon name="wait" className="icon-action" onClick={() => this.handleSnoozeIconClick(task.id)}/>}
                   {task.status !== 'CLOSED' && <Icon name="close" className="icon-action" onClick={() => this.handleCloseIconClick(task.id)}/>}
                 </Table.Cell>
               </Table.Row>
@@ -139,7 +138,7 @@ class TaskList extends Component {
         </Table>
         <Confirm
           open={isSnoozeModalOpen}
-          content="Snooze until next week?"
+          content="Snooze for a week?"
           onCancel={this.handleSnoozeModalCancel}
           onConfirm={this.handleSnoozeModalConfirm}
         />

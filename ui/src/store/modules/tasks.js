@@ -155,10 +155,8 @@ export function* snoozeTask({ accountId, taskId }) {
       `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks/${taskId}/snooze`,
       {
         method: 'POST',
-        body: JSON.stringify({ snoozedUntil: (Date.now() + 7 * 24 * 3600 * 1000).toString() }), // snooze until next week
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        body: JSON.stringify(Date.now() + 7 * 24 * 3600 * 1000), // snooze until next week
+        headers: { 'Content-Type': 'application/json' }
       }
     )
     yield call(handleResponse, response, false)
