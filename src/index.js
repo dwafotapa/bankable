@@ -18,7 +18,7 @@ store.subscribe(throttle(() => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename="/bankable">
       <App/>
     </BrowserRouter>
   </Provider>,
