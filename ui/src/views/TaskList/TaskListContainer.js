@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { toJS } from 'utils/to-js'
 import TaskList from './TaskList'
-import { fetchTasksRequest, closeTaskRequest, snoozeTaskRequest } from 'store/modules/tasks'
+import { fetchTasksRequest, closeTaskRequest, snoozeTaskRequest } from 'store/modules/tasks/tasks'
 
 const mapStateToProps = (state, ownProps) => ({
   ...ownProps,

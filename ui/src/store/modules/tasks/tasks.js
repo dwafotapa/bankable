@@ -1,10 +1,11 @@
 import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { schema, normalize } from 'normalizr'
+import { normalize } from 'normalizr'
 import { fromJS, Map } from 'immutable'
 import { handleResponse } from 'utils/fetch'
-import { getBankerId } from './bankers'
-import { setAccountTasks } from './accounts'
+import { getBankerId } from '../bankers/bankers'
+import { setAccountTasks } from '../accounts/accounts'
+import taskEntity from './tasks.schema'
 
 export const FETCH_TASKS_REQUEST = 'FETCH_TASKS_REQUEST'
 export const FETCH_TASKS_FAILURE = 'FETCH_TASKS_FAILURE'
@@ -81,27 +82,12 @@ export const snoozeTaskSuccess = () => ({
   type: SNOOZE_TASK_SUCCESS
 })
 
-export const taskEntity = new schema.Entity(
-  'tasks',
-  {},
-  {
-    processStrategy: (entity) => ({
-      id: entity.id,
-      description: entity.description,
-      dueDate: entity.due_date,
-      snoozedUntil: entity.snoozed_until || null,
-      status: entity.status,
-      type: entity.type
-    })
-  }
-)
-
 export function* fetchTasks({ accountId }) {
   try {
     const bankerId = yield select(getBankerId)
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts/${accountId}/tasks`)
     const json = yield call(handleResponse, response)
-    const normalized = normalize(json.tasks, new schema.Array(taskEntity))
+    const normalized = normalize(json.tasks, [ taskEntity ])
     yield put(fetchTasksSuccess(normalized.result, normalized.entities.tasks))
     yield put(setAccountTasks(accountId, normalized.result))
   } catch (error) {

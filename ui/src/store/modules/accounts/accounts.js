@@ -1,9 +1,10 @@
 import 'whatwg-fetch'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { schema, normalize } from 'normalizr'
+import { normalize } from 'normalizr'
 import { fromJS, List } from 'immutable'
 import { handleResponse } from 'utils/fetch'
-import { getBankerId } from './bankers'
+import { getBankerId } from '../bankers/bankers'
+import accountEntity from './accounts.schema'
 
 export const FETCH_ACCOUNTS_REQUEST = 'FETCH_ACCOUNTS_REQUEST'
 export const FETCH_ACCOUNTS_FAILURE = 'FETCH_ACCOUNTS_FAILURE'
@@ -47,24 +48,14 @@ export const resetAccountsSuccess = () => ({
   type: RESET_ACCOUNTS_SUCCESS
 })
 
-export const accountEntity = new schema.Entity(
-  'accounts',
-  {},
-  {
-    idAttribute: 'number',
-    processStrategy: (entity) => ({
-      id: entity.number,
-      companyName: entity.company_name
-    })
-  }
-)
+
 
 export function* fetchAccounts() {
   try {
     const bankerId = yield select(getBankerId)
     const response = yield call(fetch, `${process.env.REACT_APP_API_BASE_URL}/bankers/${bankerId}/accounts`)
     const json = yield call(handleResponse, response)
-    const normalized = normalize(json.accounts, new schema.Array(accountEntity))
+    const normalized = normalize(json.accounts, [ accountEntity ])
     yield put(fetchAccountsSuccess(normalized.result, normalized.entities.accounts))
   } catch (error) {
     yield put(fetchAccountsFailure(error))

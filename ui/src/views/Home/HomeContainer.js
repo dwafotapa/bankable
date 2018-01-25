@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { toJS } from 'utils/to-js'
 import Home from './Home'
-import { getBankerId, getBankerIds, resetBankerId, setBankerId } from 'store/modules/bankers'
+import { getBankerId, getBankerIds, resetBankerId, setBankerId } from 'store/modules/bankers/bankers'
 
 const mapStateToProps = (state) => ({
   bankerId: getBankerId(state),

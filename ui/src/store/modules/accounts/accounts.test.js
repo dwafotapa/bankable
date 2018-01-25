@@ -1,12 +1,13 @@
 import React from 'react'
 import saga from 'redux-saga'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { schema, normalize } from 'normalizr'
+import { normalize } from 'normalizr'
 import { fromJS } from 'immutable'
 import uuid from 'uuid'
 import { handleResponse } from 'utils/fetch'
 import reducer, * as moduleObj from './accounts'
-import { getBankerId } from './bankers'
+import accountEntity from './accounts.schema'
+import { getBankerId } from '../bankers/bankers'
 
 describe('accounts', () => {
   describe('fetchAccountsRequest()', () => {
@@ -124,7 +125,7 @@ describe('accounts', () => {
           { company_name: 'Another Random Company Name', number: 'anotheraccountid' }
         ]
       }
-      const normalized = normalize(json.accounts, new schema.Array(moduleObj.accountEntity))
+      const normalized = normalize(json.accounts, [ accountEntity ])
       expect(generator.next(json).value).toEqual(put(moduleObj.fetchAccountsSuccess(normalized.result, normalized.entities.accounts)))
       
       expect(generator.next().done).toBe(true)

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { toJS } from 'utils/to-js'
 import AccountList from './AccountList'
-import { fetchAccountsRequest, resetAccountsRequest } from 'store/modules/accounts'
+import { fetchAccountsRequest, resetAccountsRequest } from 'store/modules/accounts/accounts'
 
 const mapStateToProps = (state) => ({
   isFetching: state.accounts.get('isFetching'),

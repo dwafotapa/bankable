@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 import { all, fork } from 'redux-saga/effects'
-import bankers, { RESET_BANKER_ID, SET_BANKER_ID } from './bankers'
-import accounts, { watchFetchAccountsRequest, watchResetAccountsRequest } from './accounts'
-import tasks, { watchFetchTasksRequest, watchFetchTaskRequest, watchCloseTaskRequest, watchSnoozeTaskRequest } from './tasks'
+import bankers, { RESET_BANKER_ID, SET_BANKER_ID } from './bankers/bankers'
+import accounts, { watchFetchAccountsRequest, watchResetAccountsRequest } from './accounts/accounts'
+import tasks, { watchFetchTasksRequest, watchFetchTaskRequest, watchCloseTaskRequest, watchSnoozeTaskRequest } from './tasks/tasks'
 
 export function* rootSaga() {
   yield all([
