@@ -14,7 +14,6 @@ const MenuWrapper = () => (
     <Menu.Item
       as={NavLink}
       to="/accounts"
-      exact
     >
       Accounts
     </Menu.Item>
