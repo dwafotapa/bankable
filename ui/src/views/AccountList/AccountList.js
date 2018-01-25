@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { Button, Container, Grid, Header, List, Segment } from 'semantic-ui-react'
+import Account from './Account'
 
 class AccountList extends Component {
   componentDidMount() {
@@ -31,14 +31,7 @@ class AccountList extends Component {
         <Header as="h3" block textAlign="center">Your Accounts</Header>
         <Segment>
           <List divided relaxed>
-            {accounts.map(account =>
-              <List.Item key={account.id}>
-                <List.Content>
-                  <List.Header><Link to={`/accounts/${account.id}/tasks`}>{account.id}</Link></List.Header>
-                  <List.Description>{account.companyName}</List.Description>
-                </List.Content>
-              </List.Item>
-            )}
+            {accounts.map(account => <Account account={account} key={account.id}/>)}
           </List>
         </Segment>
         <Grid>
