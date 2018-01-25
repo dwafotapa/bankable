@@ -18,7 +18,7 @@ Then start your server:
 yarn start
 ```
 
-Then open [http://localhost:3000/](http://localhost:3000/) to see your app.
+Then open [http://localhost:3000/bankable/](http://localhost:3000/bankable/) to see your app.
 
 ## Technologies
 
