@@ -108,5 +108,5 @@
     "redux-logger": "^3.0.6",
     "redux-mock-store": "^1.4.0"
   },
-  "homepage": "https://dwafotapa.github.io/bankable"
+  "homepage": "https://dwafotapa.github.io/bankable/"
 }
