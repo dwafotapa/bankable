@@ -3,26 +3,8 @@ Bankable is a bank account management app built with [React](https://reactjs.org
 
 ## Getting Started
 
-### Server side
-
-Once you cloned the repository, you need to install the npm packages first:
-```sh
-cd server/
-yarn
-```
-
-Then start the server:
-```sh
-node index.js
-```
-
-Then open [http://localhost:5000/](http://localhost:5000/) and you should see 'OK' if the server is started.
-
-### Client side
-
 Install the npm packages first:
 ```sh
-cd ../ui/
 yarn
 ```
 
@@ -39,12 +21,6 @@ yarn start
 Then open [http://localhost:3000/](http://localhost:3000/) to see your app.
 
 ## Technologies
-
-### Server side
-
-- Node.js
-
-### Client side
 
 - Jest
 - React
