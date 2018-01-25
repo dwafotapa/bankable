@@ -31,7 +31,7 @@ class AccountList extends Component {
         <Header as="h3" block textAlign="center">Your Accounts</Header>
         <Segment>
           <List divided relaxed>
-            {accounts.map(account => <Account account={account} key={account.id}/>)}
+            {accounts.map(account => <Account key={account.id} account={account}/>)}
           </List>
         </Segment>
         <Grid>

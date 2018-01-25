@@ -3,16 +3,8 @@ import PropTypes from 'prop-types'
 import { Confirm, Container, Grid, Header, Icon, Table } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import sortBy from 'lodash/sortBy'
+import Task from './Task'
 import './TaskList.css'
-
-const isTaskUrgent = (task) => {
-  if (task.status === 'CLOSED') {
-    return false
-  }
-
-  const now = new Date(), dueDate = new Date(task.dueDate), snoozedUntilDate = new Date(task.snoozedUntil)
-  return now > dueDate && (!task.snoozedUntil || now > snoozedUntilDate)
-}
 
 class TaskList extends Component {
   constructor(props) {
@@ -116,23 +108,13 @@ class TaskList extends Component {
           </Table.Header>
           <Table.Body>
             {tasks.map(task =>
-              <Table.Row
+              <Task
                 key={task.id}
-                active={task.id === selectedTaskId}
-                warning={isTaskUrgent(task)}
-              >
-                <Table.Cell>{task.type}</Table.Cell>
-                <Table.Cell>{task.status}</Table.Cell>
-                <Table.Cell textAlign="right">
-                  {isTaskUrgent(task) && <Icon name="attention"/>}
-                  {task.dueDate && new Date(task.dueDate).toLocaleDateString()}
-                </Table.Cell>
-                <Table.Cell textAlign="right">{task.snoozedUntil && new Date(task.snoozedUntil).toLocaleDateString()}</Table.Cell>
-                <Table.Cell textAlign="right">
-                  {task.status !== 'CLOSED' && <Icon name="wait" className="icon-action" onClick={() => this.handleSnoozeIconClick(task.id)}/>}
-                  {task.status !== 'CLOSED' && <Icon name="close" className="icon-action" onClick={() => this.handleCloseIconClick(task.id)}/>}
-                </Table.Cell>
-              </Table.Row>
+                task={task}
+                selectedTaskId={selectedTaskId}
+                handleSnoozeIconClick={this.handleSnoozeIconClick}
+                handleCloseIconClick={this.handleCloseIconClick}
+              />
             )}
           </Table.Body>
         </Table>
