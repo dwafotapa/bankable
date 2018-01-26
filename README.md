@@ -1,24 +1,28 @@
 # Bankable
-Bankable is a bank account management app built with [React](https://reactjs.org/) and [Redux](https://redux.js.org/) and gives an interface to internal users (aka bankers) to perform customer-related tasks.
+Bankable is a bank account management app built with [React](https://reactjs.org/) and [Redux](https://redux.js.org/) for bankers to perform customer-related tasks.
 
-## Getting Started
+## Demo
 
-Install the npm packages first:
+https://dwafotapa.github.io/bankable/
+
+## Installation
+
+Get the npm packages first:
 ```sh
 yarn
 ```
 
-To run the tests: 
+Run the tests:
 ```sh
 yarn test
 ```
 
-Then start your server:
+Start the dev server:
 ```sh
 yarn start
 ```
 
-Then open [http://localhost:3000/bankable/](http://localhost:3000/bankable/) to see your app.
+Then open [http://localhost:3000/bankable/](http://localhost:3000/bankable/) and sign in to start managing accounts.
 
 ## Technologies
 
@@ -26,6 +30,7 @@ Then open [http://localhost:3000/bankable/](http://localhost:3000/bankable/) to 
 - React
 - Redux
 - Redux-Saga
+- normalizr
 - Semantic UI React
 - Webpack
 
